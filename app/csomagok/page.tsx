@@ -5,11 +5,11 @@ import { Check, Cpu, HardDrive, MemoryStick, ShieldCheck, X } from 'lucide-react
 import { SiteShell } from '@/components/site-shell'
 import { OrderForm } from '@/components/order-form'
 
-const pythonLogo = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/k%C3%A9p-tKPNQ7c7CwFXkVQyBoLMLzMXeBIbjD.png'
-const minecraftLogo = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/k%C3%A9p-mg49O1t9af6WT4PWoGuFygTPcDsYSe.png'
+const pythonLogo = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/k%C3%A9p-AzEWt3pARu97Yz3uA9JwoX39WGsKbc.png'
+const minecraftLogo = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/k%C3%A9p-cHHmVn7ua4VipGk1uRT55atthxxPKf.png'
 
 function PackageCard({ type, title, description, logo, soon = false, onOrder }: { type: string; title: string; description: string; logo: string; soon?: boolean; onOrder?: () => void }) {
-  return <article className="rounded-3xl border border-white/10 bg-[#111111] p-6 shadow-[0_24px_70px_-45px_rgba(215,25,32,.8)] transition hover:-translate-y-1 hover:border-[#d71920]/70">
+  return <article className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#111111] p-6 shadow-[0_24px_70px_-45px_rgba(215,25,32,.8)] transition hover:-translate-y-1 hover:border-[#d71920]/70">
     <div className="flex items-start justify-between gap-4"><div><div className="mb-5 flex size-14 items-center justify-center rounded-2xl bg-black p-2 ring-1 ring-white/10"><img src={logo} alt={`${title} logó`} className="size-full object-contain" /></div><p className="eyebrow">{type}</p><h2 className="mt-2 text-2xl font-black text-white">{title}</h2></div>{soon ? <span className="rounded-full border border-[#d71920]/40 bg-[#d71920]/10 px-3 py-1 text-xs font-bold text-[#ef343b]">Hamarosan</span> : <span className="rounded-full bg-[#d71920] px-3 py-1 text-xs font-bold text-white">Elérhető</span>}</div>
     <p className="mt-5 text-sm leading-6 text-white/55">{description}</p>
     <ul className="mt-6 space-y-3 border-t border-white/10 pt-5 text-sm font-semibold text-white/70"><li><Check className="mr-2 inline text-[#ef343b]" size={16} />DDoS védelem</li><li><Check className="mr-2 inline text-[#ef343b]" size={16} />0–24 órás futtatás</li><li><Check className="mr-2 inline text-[#ef343b]" size={16} />Frankfurti lokáció</li></ul>
