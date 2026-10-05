@@ -5,12 +5,13 @@ import { ArrowRight, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
 const logoUrl = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT_Image_2026._okt._3._17_43_42-removebg-preview-CUP7xnyxmg6Y25LY2fIKNYiEVJANAe.png'
+const selectClass = 'rounded-lg border border-white/15 bg-[#171010] px-2.5 py-1.5 text-[11px] font-bold text-white outline-none focus:border-[#ef343b]'
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
   return (
     <div className="min-h-screen bg-[#080808] text-white">
-      <div className="bg-[#d71920] px-5 py-2 text-center text-xs font-black uppercase tracking-[0.16em] text-white">10% kedvezmény az ELSO10 kuponkódhoz</div>
+      <div className="flex flex-wrap items-center justify-center gap-3 bg-[#d71920] px-5 py-2 text-center text-xs font-black uppercase tracking-[0.12em] text-white"><span>10% kedvezmény az ELSO10 kuponkódhoz</span><label className="flex items-center gap-1.5 normal-case tracking-normal"><span className="sr-only">Nyelv</span><select aria-label="Nyelv" className={selectClass} defaultValue="HU"><option>HU</option><option>EN</option></select></label><label className="flex items-center gap-1.5 normal-case tracking-normal"><span className="sr-only">Pénznem</span><select aria-label="Pénznem" className={selectClass} defaultValue="HUF"><option>HUF / Ft</option><option>EUR</option><option>USD</option></select></label></div>
       <header className="sticky top-0 z-40 border-b border-white/10 bg-[#080808]/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 lg:px-8">
           <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
