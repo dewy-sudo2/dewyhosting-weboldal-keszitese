@@ -164,7 +164,7 @@
 }
 
 @layer components {
-  .eyebrow { @apply text-xs font-black uppercase tracking-[0.2em] text-[#b33a3d]; }
-  .section-title { @apply mt-3 text-4xl font-black tracking-[-0.04em] text-[#2a292a]; }
-  .form-input { @apply mt-2 block w-full rounded-xl border border-[#ded8d6] bg-[#faf9f8] px-4 py-3 text-sm font-normal outline-none transition placeholder:text-[#aaa5a6] focus:border-[#b33a3d] focus:ring-2 focus:ring-[#b33a3d]/15; }
+  .eyebrow { @apply text-xs font-black uppercase tracking-[0.2em] text-[#ef343b]; }
+  .section-title { @apply mt-3 text-4xl font-black tracking-[-0.04em] text-white; }
+  .form-input { @apply mt-2 block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-normal text-white outline-none transition placeholder:text-white/35 focus:border-[#ef343b] focus:ring-2 focus:ring-[#ef343b]/20; }
 }
