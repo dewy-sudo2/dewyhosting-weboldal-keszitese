@@ -1,27 +1,21 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
+import { FormEvent, useMemo, useState } from 'react'
 import { Check, Loader2, Send } from 'lucide-react'
 
-export function OrderForm() {
+export function OrderForm({ onSuccess }: { onSuccess?: () => void }) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [ram, setRam] = useState(false)
+  const [cpu, setCpu] = useState(false)
+  const total = useMemo(() => 390 + (ram ? 50 : 0) + (cpu ? 100 : 0), [ram, cpu])
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setStatus('loading')
     const form = new FormData(event.currentTarget)
-    try {
-      const response = await fetch('/api/order', { method: 'POST', body: JSON.stringify(Object.fromEntries(form)), headers: { 'Content-Type': 'application/json' } })
-      if (!response.ok) throw new Error('failed')
-      setStatus('success'); event.currentTarget.reset()
-    } catch { setStatus('error') }
+    form.set('ramAddon', ram ? '+100 MB tárhely' : 'Nincs')
+    form.set('cpuAddon', cpu ? '+10% CPU' : 'Nincs')
+    form.set('total', `${total} Ft`)
+    try { const response = await fetch('/api/order', { method: 'POST', body: JSON.stringify(Object.fromEntries(form)), headers: { 'Content-Type': 'application/json' } }); if (!response.ok) throw new Error('failed'); setStatus('success'); event.currentTarget.reset(); onSuccess?.() } catch { setStatus('error') }
   }
-  if (status === 'success') return <div className="rounded-2xl border border-[#b8d8c3] bg-[#effaf2] p-8 text-center"><div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-[#3f8c5a] text-white"><Check /></div><h3 className="text-xl font-bold">Rendelés elküldve!</h3><p className="mt-2 text-sm text-[#587061]">Hamarosan felvesszük veled a kapcsolatot Discordon.</p><button onClick={() => setStatus('idle')} className="mt-5 text-sm font-bold text-[#b33a3d] underline">Új rendelés</button></div>
-  return <form onSubmit={submit} className="space-y-4">
-    <div className="grid gap-4 sm:grid-cols-2"><label className="text-sm font-semibold">Neved<input required name="name" className="form-input" placeholder="Pl. Dávid" /></label><label className="text-sm font-semibold">Discord neved<input required name="discord" className="form-input" placeholder="felhasznalo#0000" /></label></div>
-    <label className="block text-sm font-semibold">Szerver neve<input required name="serverName" className="form-input" placeholder="A Discord szervered neve" /></label>
-    <label className="block text-sm font-semibold">Discord szerver meghívója<input required name="invite" className="form-input" placeholder="https://discord.gg/..." /></label>
-    <label className="block text-sm font-semibold">Kuponkód <span className="font-normal text-[#8c8889]">(opcionális)</span><input name="coupon" className="form-input" placeholder="ELSO10" /></label>
-    <label className="flex items-start gap-3 text-xs text-[#777274]"><input required type="checkbox" className="mt-0.5 accent-[#b33a3d]" />Elfogadom, hogy a megadott adatokat a rendelés teljesítéséhez kezelitek.</label>
-    <button disabled={status === 'loading'} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#b33a3d] px-5 py-3.5 font-bold text-white transition hover:bg-[#942f33] disabled:opacity-60">{status === 'loading' ? <><Loader2 className="animate-spin" size={17} /> Küldés...</> : <><Send size={17} /> Rendelés elküldése</>}</button>
-    {status === 'error' && <p className="text-center text-sm font-semibold text-[#b33a3d]">Hiba történt. Próbáld újra később.</p>}
-  </form>
+  if (status === 'success') return <div className="rounded-2xl border border-[#d71920]/40 bg-[#180d0e] p-8 text-center"><div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-[#d71920] text-white"><Check /></div><h3 className="text-xl font-bold text-white">Rendelés elküldve!</h3><p className="mt-2 text-sm text-white/55">Hamarosan felvesszük veled a kapcsolatot Discordon.</p></div>
+  return <form onSubmit={submit} className="mt-6 space-y-4"><div className="grid gap-4 sm:grid-cols-2"><label className="text-sm font-semibold text-white/80">Neved<input required name="name" className="form-input" placeholder="Pl. Dávid" /></label><label className="text-sm font-semibold text-white/80">Discord neved<input required name="discord" className="form-input" placeholder="felhasznalo#0000" /></label></div><label className="block text-sm font-semibold text-white/80">Szerver neve<input required name="serverName" className="form-input" placeholder="Mi legyen a szerver neve?" /></label><label className="block text-sm font-semibold text-white/80">Kuponkód <span className="font-normal text-white/40">(opcionális)</span><input name="coupon" className="form-input" placeholder="Kuponkód" /></label><div className="grid gap-3 sm:grid-cols-2"><label className={`cursor-pointer rounded-xl border p-4 transition ${ram ? 'border-[#d71920] bg-[#d71920]/10' : 'border-white/10 bg-black/20'}`}><input type="checkbox" checked={ram} onChange={(e) => setRam(e.target.checked)} className="mr-3 accent-[#d71920]" />+100 MB tárhely <span className="text-[#ef343b]">(+50 Ft)</span></label><label className={`cursor-pointer rounded-xl border p-4 transition ${cpu ? 'border-[#d71920] bg-[#d71920]/10' : 'border-white/10 bg-black/20'}`}><input type="checkbox" checked={cpu} onChange={(e) => setCpu(e.target.checked)} className="mr-3 accent-[#d71920]" />+10% CPU <span className="text-[#ef343b]">(+100 Ft)</span></label></div><div className="flex items-center justify-between rounded-xl border border-white/10 bg-black/25 px-4 py-4"><span className="font-bold text-white">Végösszeg</span><strong className="text-2xl text-[#ef343b]">{total} Ft<span className="ml-1 text-xs text-white/45">/ hó</span></strong></div><label className="flex items-start gap-3 text-xs text-white/45"><input required type="checkbox" className="mt-0.5 accent-[#d71920]" />Elfogadom, hogy a megadott adatokat a rendelés teljesítéséhez kezelitek.</label><button disabled={status === 'loading'} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#d71920] px-5 py-3.5 font-bold text-white transition hover:bg-[#b51218] disabled:opacity-60">{status === 'loading' ? <><Loader2 className="animate-spin" size={17} /> Küldés...</> : <><Send size={17} /> Rendelés elküldése</>}</button>{status === 'error' && <p className="text-center text-sm font-semibold text-[#ef343b]">Hiba történt. Próbáld újra később.</p>}</form>
 }
